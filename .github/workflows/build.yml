@@ -31,12 +31,8 @@ jobs:
         run: git config --global --add safe.directory /__w/WSL2-Linux-Kernel-Rolling/WSL2-Linux-Kernel-Rolling
 
       - name: Download WSL2 stable kernel
-        uses: actions/checkout@main
-        with:
-          ref: $TAG_VERSION
-          fetch-depth: 1
-          path: linux
-          fetch-tags: true
+        run: |
+          git clone https://github.com/taliesins/WSL2-Linux-Kernel-Rolling.git --depth 1 -b $TAG_VERSION linux
 
       - name: Build WSL2 stable kernel
         run: |
