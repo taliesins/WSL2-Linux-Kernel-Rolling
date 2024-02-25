@@ -36,6 +36,7 @@ jobs:
           ref: $TAG_VERSION
           fetch-depth: 1
           path: linux
+          fetch-tags: true
 
       - name: Build WSL2 stable kernel
         run: |
