@@ -57,189 +57,347 @@ else
         channel=stable
     fi
 
+    echo ""
+    echo ""
+    echo " Checking kernel module files... [13 Modules] "
+    echo ""
+    echo ""
+
     if [[ $channel == "stable" ]]; then
-        if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.alias" ]]; then
-            file_checker=0
+        if [[ ! -d "lib/modules/$version-WSL2-STABLE+/kernel" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [1/14] kernel directory Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
         else
-            file_checker=1
+            echo " [1/14] kernel directory OK. "
+        fi
+
+        if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.alias" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [2/14] modules.alias Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
+        else
+            echo " [2/14] modules.alias OK. "
         fi
 
         if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.alias.bin" ]]; then
-            file_checker=0
+            echo ""
+            echo ""
+            echo " !!-- [3/14] modules.alias.bin Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
         else
-            file_checker=1
+            echo " [3/14] modules.alias.bin OK. "
         fi
 
         if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.builtin" ]]; then
-            file_checker=0
+            echo ""
+            echo ""
+            echo " !!-- [4/14] modules.builtin Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
         else
-            file_checker=1
+            echo " [4/14] modules.builtin OK. "
         fi
 
         if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.builtin.alias.bin" ]]; then
-            file_checker=0
+            echo ""
+            echo ""
+            echo " !!-- [5/14] modules.builtin.alias.bin Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
         else
-            file_checker=1
+            echo " [5/14] modules.builtin.alias.bin OK. "
         fi
 
         if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.builtin.bin" ]]; then
-            file_checker=0
+            echo ""
+            echo ""
+            echo " !!-- [6/14] modules.builtin.bin Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
         else
-            file_checker=1
+            echo " [6/14] modules.builtin.bin OK. "
         fi
 
         if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.builtin.modinfo" ]]; then
-            file_checker=0
+            echo ""
+            echo ""
+            echo " !!-- [7/14] modules.builtin.modinfo Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
         else
-            file_checker=1
+            echo " [7/14] modules.builtin.modinfo OK. "
         fi
 
         if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.dep" ]]; then
-            file_checker=0
+            echo ""
+            echo ""
+            echo " !!-- [8/14] modules.dep Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
         else
-            file_checker=1
+            echo " [8/14] modules.dep OK. "
         fi
 
         if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.dep.bin" ]]; then
-            file_checker=0
+            echo ""
+            echo ""
+            echo " !!-- [9/14] modules.dep.bin Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
         else
-            file_checker=1
+            echo " [9/14] modules.dep.bin OK. "
         fi
 
         if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.devname" ]]; then
-            file_checker=0
+            echo ""
+            echo ""
+            echo " !!-- [10/14] modules.devname Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
         else
-            file_checker=1
+            echo " [10/14] modules.devname OK. "
         fi
 
         if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.order" ]]; then
-            file_checker=0
+            echo ""
+            echo ""
+            echo " !!-- [11/14] modules.order Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
         else
-            file_checker=1
+            echo " [11/14] modules.order OK. "
         fi
 
         if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.softdep" ]]; then
-            file_checker=0
+            echo ""
+            echo ""
+            echo " !!-- [12/14] modules.softdep Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
         else
-            file_checker=1
+            echo " [12/14] modules.softdep OK. "
         fi
 
         if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.symbols" ]]; then
-            file_checker=0
+            echo ""
+            echo ""
+            echo " !!-- [13/14] modules.symbols Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
         else
-            file_checker=1
+            echo " [13/14] modules.symbols OK. "
         fi
 
         if [[ ! -e "lib/modules/$version-WSL2-STABLE+/modules.symbols.bin" ]]; then
-            file_checker=0
-        else
-            file_checker=1
-        fi
-
-        if [[ $file_checker == "1" ]]; then
             echo ""
             echo ""
-            echo " Kernel modules package files found. "
-        else
-            echo ""
-            echo ""
-            echo " !!-- Some kernel modules package files not found! --!! "
+            echo " !!-- [14/14] modules.symbols.bin Not Exist! --!! "
             echo " !!-- Abort install kernel modules package --!! "
             echo ""
             echo ""
             exit 1
+        else
+            echo " [14/14] modules.symbols.bin OK. "
         fi
     else
-        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.alias" ]]; then
-            file_checker=0
+        if [[ ! -d "lib/modules/$version-WSL2-LTS+/kernel" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [1/14] kernel directory Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
         else
-            file_checker=1
+            echo " [1/14] kernel directory OK. "
+        fi
+
+        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.alias" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [2/14] modules.alias Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
+        else
+            echo " [2/14] modules.alias OK. "
         fi
 
         if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.alias.bin" ]]; then
-            file_checker=0
-        else
-            file_checker=1
-        fi
-
-        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.builtin" ]]; then
-            file_checker=0
-        else
-            file_checker=1
-        fi
-
-        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.builtin.alias.bin" ]]; then
-            file_checker=0
-        else
-            file_checker=1
-        fi
-
-        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.builtin.bin" ]]; then
-            file_checker=0
-        else
-            file_checker=1
-        fi
-
-        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.builtin.modinfo" ]]; then
-            file_checker=0
-        else
-            file_checker=1
-        fi
-
-        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.dep" ]]; then
-            file_checker=0
-        else
-            file_checker=1
-        fi
-
-        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.dep.bin" ]]; then
-            file_checker=0
-        else
-            file_checker=1
-        fi
-
-        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.devname" ]]; then
-            file_checker=0
-        else
-            file_checker=1
-        fi
-
-        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.order" ]]; then
-            file_checker=0
-        else
-            file_checker=1
-        fi
-
-        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.softdep" ]]; then
-            file_checker=0
-        else
-            file_checker=1
-        fi
-
-        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.symbols" ]]; then
-            file_checker=0
-        else
-            file_checker=1
-        fi
-
-        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.symbols.bin" ]]; then
-            file_checker=0
-        else
-            file_checker=1
-        fi
-
-        if [[ $file_checker == "1" ]]; then
             echo ""
             echo ""
-            echo " Kernel modules package files found. "
-        else
-            echo ""
-            echo ""
-            echo " !!-- Some kernel modules package files not found! --!! "
+            echo " !!-- [3/14] modules.alias.bin Not Exist! --!! "
             echo " !!-- Abort install kernel modules package --!! "
             echo ""
             echo ""
             exit 1
+        else
+            echo " [3/14] modules.alias.bin OK. "
+        fi
+
+        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.builtin" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [4/14] modules.builtin Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
+        else
+            echo " [4/14] modules.builtin OK. "
+        fi
+
+        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.builtin.alias.bin" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [5/14] modules.builtin.alias.bin Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
+        else
+            echo " [5/14] modules.builtin.alias.bin OK. "
+        fi
+
+        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.builtin.bin" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [6/14] modules.builtin.bin Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
+        else
+            echo " [6/14] modules.builtin.bin OK. "
+        fi
+
+        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.builtin.modinfo" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [7/14] modules.builtin.modinfo Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
+        else
+            echo " [7/14] modules.builtin.modinfo OK. "
+        fi
+
+        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.dep" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [8/14] modules.dep Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
+        else
+            echo " [8/14] modules.dep OK. "
+        fi
+
+        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.dep.bin" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [9/14] modules.dep.bin Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
+        else
+            echo " [9/14] modules.dep.bin OK. "
+        fi
+
+        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.devname" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [10/14] modules.devname Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
+        else
+            echo " [10/14] modules.devname OK. "
+        fi
+
+        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.order" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [11/14] modules.order Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
+        else
+            echo " [11/14] modules.order OK. "
+        fi
+
+        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.softdep" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [12/14] modules.softdep Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
+        else
+            echo " [12/14] modules.softdep OK. "
+        fi
+
+        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.symbols" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [13/14] modules.symbols Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
+        else
+            echo " [13/14] modules.symbols OK. "
+        fi
+
+        if [[ ! -e "lib/modules/$version-WSL2-LTS+/modules.symbols.bin" ]]; then
+            echo ""
+            echo ""
+            echo " !!-- [14/14] modules.symbols.bin Not Exist! --!! "
+            echo " !!-- Abort install kernel modules package --!! "
+            echo ""
+            echo ""
+            exit 1
+        else
+            echo " [14/14] modules.symbols.bin OK. "
         fi
     fi
 
