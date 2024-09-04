@@ -25,6 +25,8 @@ jobs:
             image-name: bzImage-x86_64
           - arch: arm64
             image-name: Image-arm64
+    env:
+      TAG_VERSION: '${{ github.ref_name }}'
 
     steps:
       - name: Trust this directory
