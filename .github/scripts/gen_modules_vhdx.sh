@@ -12,31 +12,43 @@ if [ -e "$3" ]; then
 fi
 
 
-# Calculate modules size (+ 256MiB for slack)
-modules_size=$(du -bs "$1" | awk '{print $1;}')
-modules_size=$((modules_size + (256*(1<<20))))
+# Inputs
+SRC_DIR="$1"       # e.g., /path/to/rootfs
+KERNEL_VER="$2"    # e.g., 6.14.5
+OUTPUT_VHDX="$3"   # e.g., /path/to/modules.vhdx
 
-# Create our scratch directory
+# Temp dir for working space
 tmp_dir=$(mktemp -d)
+trap "losetup -d /dev/loop*" EXIT
 
-# Create a blank image file of the right size
-dd if=/dev/zero of="$tmp_dir/modules.img" bs=1024 count=$((modules_size / 1024))
+# Calculate required size: actual + 256MiB slack
+modules_size=$(du -bs "$SRC_DIR/lib/modules/$KERNEL_VER" | awk '{print $1}')
+modules_size=$((modules_size + (256 * 1024 * 1024)))
 
-# Set up fs and mount
-lo_dev=$(losetup --find --show "$tmp_dir/modules.img")
-mkfs -t ext4 "$lo_dev"
-mkdir "$tmp_dir/modules_img"
-mount "$lo_dev" "$tmp_dir/modules_img"
-chmod a+rw "$tmp_dir/modules_img"
+# Create blank sparse image
+img_path="$tmp_dir/modules.img"
+truncate -s "$modules_size" "$img_path"
 
-# Copy over the contents of $1
-cp -r "$1/lib/modules/$2"/* "$tmp_dir/modules_img"
-umount "$tmp_dir/modules_img"
+# Format image and mount it
+loop_dev=$(losetup --find --show "$img_path")
+mkfs.ext4 -q "$loop_dev"
 
-# Do the final conversion
-qemu-img convert -O vhdx "$tmp_dir/modules.img" "$3"
+mkdir "$tmp_dir/mnt"
+mount "$loop_dev" "$tmp_dir/mnt"
+
+# Copy kernel modules
+rsync -a "$SRC_DIR/lib/modules/$KERNEL_VER/" "$tmp_dir/mnt/"
+
+# Zero free space to allow sparse conversion
+dd if=/dev/zero of="$tmp_dir/mnt/zero.fill" bs=1M || true
+rm -f "$tmp_dir/mnt/zero.fill"
+sync
+umount "$tmp_dir/mnt"
+
+# Convert to VHDX (sparse)
+qemu-img convert -O vhdx -o subformat=dynamic "$img_path" "$OUTPUT_VHDX"
 
 # Fix ownership since we're probably running under sudo
 if [ -n "$SUDO_USER" ]; then
-	chown "$SUDO_USER:$SUDO_USER" "$3"
+	chown "$SUDO_USER:$SUDO_USER" "$OUTPUT_VHDX"
 fi
