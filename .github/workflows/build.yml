@@ -32,11 +32,12 @@ jobs:
       - name: Trust this directory
         run: git config --global --add safe.directory /__w/WSL2-Linux-Kernel-Rolling/WSL2-Linux-Kernel-Rolling
 
-      - uses: actions/checkout@main
-
       - name: Download WSL2 stable kernel
-        run: |
-          git clone https://github.com/Nevuly/WSL2-Linux-Kernel-Rolling.git --depth 1 -b ${{ github.ref_name }} linux
+        uses: actions/checkout@main
+        with:
+          ref: $TAG_VERSION
+          fetch-depth: 1
+          path: linux
 
       - name: Build WSL2 stable kernel
         run: |
@@ -158,11 +159,14 @@ jobs:
           tar -czf ${{ matrix.image-name }}-addon_install.tar.gz ${{ matrix.image-name }}-addon_install && mv ${{ matrix.image-name }}-addon_install.tar.gz ../
           echo "Done"
 
-      - name: Generate SHA-256 Checksum
-        id: gen-sha-256
+      - name: Generate SHA3-512 Checksum
+        id: gen-sha3-512
         run: |
           if [ ${{ matrix.arch }} == "x86" ]
           then
+          read -r x86ImageSHA rest <<< "$(rhash --sha3-512 ${{ matrix.image-name }})"
+          read -r x86ModuleSHA rest <<< "$(rhash --sha3-512 ${{ matrix.image-name }}-modules_install.tar.gz)"
+          read -r x86OptionalSHA rest <<< "$(rhash --sha3-512 ${{ matrix.image-name }}-optional_install.tar.gz)"
           read -r x86ImageSHA rest <<< "$(sha256sum ${{ matrix.image-name }})"
           read -r x86AddonSHA rest <<< "$(sha256sum ${{ matrix.image-name }}-addon_install.tar.gz)"
           read -r x86AddonVHDXSHA rest <<< "$(sha256sum ${{ matrix.image-name }}-addon.vhdx)"
@@ -170,6 +174,9 @@ jobs:
           echo "X86_ADDON_SHA=$x86AddonSHA" >> $GITHUB_OUTPUT
           echo "X86_ADDON_VHDX_SHA=$x86AddonVHDXSHA" >> $GITHUB_OUTPUT
           else
+          read -r arm64ImageSHA rest <<< "$(rhash --sha3-512 ${{ matrix.image-name }})"
+          read -r arm64ModuleSHA rest <<< "$(rhash --sha3-512 ${{ matrix.image-name }}-modules_install.tar.gz)"
+          read -r arm64OptionalSHA rest <<< "$(rhash --sha3-512 ${{ matrix.image-name }}-optional_install.tar.gz)"
           read -r arm64ImageSHA rest <<< "$(sha256sum ${{ matrix.image-name }})"
           read -r arm64AddonSHA rest <<< "$(sha256sum ${{ matrix.image-name }}-addon_install.tar.gz)"
           read -r arm64AddonVHDXSHA rest <<< "$(sha256sum ${{ matrix.image-name }}-addon.vhdx)"
@@ -219,7 +226,7 @@ jobs:
             ARM64 kernel has not been tested. If you have any issues, please leave an issue on the [Issues tab](https://github.com/Nevuly/WSL2-Rolling-Kernel-Issue/issues)!
 
             **Hash Information**
-            | File Name | SHA-256 Checksum |
+            | File Name | SHA3-512 Checksum |
             |:--------------:|:------:|
             | bzImage-x86_64 | ${{ env.X86_IMAGE_SHA }} |
             | bzImage-x86_64-addon_install.tar.gz | ${{ env.X86_ADDON_SHA }} |
@@ -232,6 +239,14 @@ jobs:
             Before you try to apply this kernel, You **MUST** shutdown your WSL. (wsl --shutdown)
             Check this [document](https://learn.microsoft.com/en-us/windows/wsl/wsl-config).
 
+            **How to install kernel module package in WSL2?**
+            The installation script is already contained within the kernel module package tarball.
+            You can run **modules-install.sh** file with root.
+
+            **How to install kernel optionals package in WSL2? (Optional)**
+            The installation script is already contained within the kernel optionals package tarball.
+            It included kernel headers and kernel documentations.
+            You can run **optionals-install.sh** file with root.
             **How to install kernel additional package in WSL2?**
             Please check this [guideline](https://github.com/Nevuly/WSL2-Linux-Kernel-Rolling/wiki#kernel-additional-package-installation).
 
